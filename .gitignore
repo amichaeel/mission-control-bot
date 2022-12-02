@@ -1,0 +1,4 @@
+props.properties
+.vscode
+target/
+.mvn/wrapper/maven-wrapper.jar
