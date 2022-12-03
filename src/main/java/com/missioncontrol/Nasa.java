@@ -23,14 +23,15 @@ public class Nasa {
         JSONObject resObj = response.getBody().getObject();
         String hdurl = resObj.getString("hdurl");
         String title = resObj.getString("title") + ".png";
-        String date = resObj.getString("date");
-
-        String tweet = title.replace(".png", "") + ", " + date;
+        String text = resObj.getString("explanation");
+        if (text.length() > 280) {
+            text = text.substring(0, 276) + "...";
+        }
 
         Image.saveImage(hdurl, title);
         File file = new File("src/img/" + title);
         try {
-            Tweet.newTweetWithImage(tweet, file);
+            Tweet.newTweetWithImage(text, file);
         } catch (TwitterException e) {
             e.printStackTrace();
         }

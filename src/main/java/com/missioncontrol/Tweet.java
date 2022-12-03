@@ -1,4 +1,4 @@
-package com.imdbbot;
+package com.missioncontrol;
 
 import twitter4j.*;
 import twitter4j.v1.*;
