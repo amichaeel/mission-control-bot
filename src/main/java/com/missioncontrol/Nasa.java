@@ -25,7 +25,12 @@ public class Nasa {
         String title = resObj.getString("title") + ".png";
         String text = resObj.getString("explanation");
         if (text.length() > 280) {
-            text = text.substring(0, 276) + "...";
+            text = text.substring(0, 276);
+            if (text.substring(text.length()-1).equals(" ")) {
+                text = text.substring(0, 275);
+            }
+
+            text += "...";
         }
 
         Image.saveImage(hdurl, title);
