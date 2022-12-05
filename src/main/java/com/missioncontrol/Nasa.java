@@ -90,13 +90,11 @@ public class Nasa {
         Image.deleteImage(file);
     }
 
-    public static void tweetNaturalDisaster() throws Exception {
+    public static void tweetHazard() throws Exception {
         Props keys = Props.getProps();
         String urlString = "https://eonet.gsfc.nasa.gov/api/v3/events";
 
-        // Send the HTTP request and get the response
         HttpResponse<JsonNode> response = Unirest.get(urlString).asJson();
-        // Parse the JSON response
         JSONObject responseObject = response.getBody().getObject();
         JSONArray eventsArray = responseObject.getJSONArray("events");
         JSONObject latestEvent = eventsArray.getJSONObject(0);
@@ -109,7 +107,7 @@ public class Nasa {
         String magnitudeUnit = "";
         if (eventGeometryObj.get("magnitudeValue") != null) {
             magnitudeValue = eventGeometryObj.get("magnitudeValue").toString();
-            magnitudeUnit = eventGeometryObj.getString("magnitudeUnit");
+            magnitudeUnit = eventGeometryObj.get("magnitudeUnit").toString();
         }
 
 
@@ -132,8 +130,11 @@ public class Nasa {
             location = geoInfo.getString("city") + ", " + geoInfo.getString("country");
         }
 
-
-        // Tweet the latest natural disaster information
-        Tweet.newTweet("Natural Disaster Detected\nEvent Title: " + eventTitle + "\nDate: " + date + "\nNear: " + location + "\nMagnitude: " + magnitudeValue + " " + magnitudeUnit);
+        // Tweet the latest hazard information
+        if (!magnitudeValue.equals("null")) {
+            Tweet.newTweet("⚠️Hazard Detected\nEvent Title: " + eventTitle + "\nDate: " + date + "\nNear: " + location + "\nMagnitude: " + magnitudeValue + " " + magnitudeUnit);
+        } else {
+            Tweet.newTweet("⚠️Hazard Detected\nEvent Title: " + eventTitle + "\nDate: " + date + "\nNear: " + location);
+        }
     }
 }
