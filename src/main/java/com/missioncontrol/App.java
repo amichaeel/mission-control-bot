@@ -8,5 +8,6 @@ import twitter4j.TwitterException;
 
 public class App {
     public static void main(String[] args) throws Exception {
+        Nasa.tweetNaturalDisaster();
     }
 }

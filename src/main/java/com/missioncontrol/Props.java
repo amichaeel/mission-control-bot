@@ -9,6 +9,7 @@ public class Props {
     String accessToken;
     String accessSecret;
     String nasaKey;
+    String geoapifykey;
 
     public Props() {
 
@@ -23,6 +24,7 @@ public class Props {
         propsObj.accessToken = props.getProperty("oauth.accessToken");
         propsObj.accessSecret = props.getProperty("oauth.accessTokenSecret");
         propsObj.nasaKey = props.getProperty("nasaKey");
+        propsObj.geoapifykey = props.getProperty("geoapifyKey");
 
         return propsObj;
     }

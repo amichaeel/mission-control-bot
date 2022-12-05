@@ -91,6 +91,7 @@ public class Nasa {
     }
 
     public static void tweetNaturalDisaster() throws Exception {
+        Props keys = Props.getProps();
         String urlString = "https://eonet.gsfc.nasa.gov/api/v3/events";
 
         // Send the HTTP request and get the response
@@ -114,10 +115,25 @@ public class Nasa {
 
         String date = eventGeometryObj.getString("date").substring(0, 10);
         JSONArray cords = eventGeometryObj.getJSONArray("coordinates");
-        String lat = cords.get(0).toString();
-        String lon = cords.get(1).toString();
+        String lat = cords.get(1).toString();
+        String lon = cords.get(0).toString();
+
+        String geoAPI = "https://api.geoapify.com/v1/geocode/reverse?lon=" + lon +"&lat="+ lat + "&format=json&apiKey=" + keys.geoapifykey;
+        System.out.println("Contacting API Via: " + geoAPI);
+        // Get information about location from coordinates
+        HttpResponse<JsonNode> geoapify = Unirest.get(geoAPI).asJson();
+        JSONObject geoResults = geoapify.getBody().getObject();
+        JSONArray geoArray = geoResults.getJSONArray("results");
+        JSONObject geoInfo = geoArray.getJSONObject(0);
+        String location = "";
+        if (geoInfo.has("name")) {
+            location = geoInfo.getString("name");
+        } else if (geoInfo.has("country")) {
+            location = geoInfo.getString("city") + ", " + geoInfo.getString("country");
+        }
+
 
         // Tweet the latest natural disaster information
-        Tweet.newTweet("Natural Disaster Detected\nEvent Title: " + eventTitle + "\nDate: " + date + "\nLattitude: " + lat + "\nLongitude: " + lon + "\nMagnitude: " + magnitudeValue + " " + magnitudeUnit);
+        Tweet.newTweet("Natural Disaster Detected\nEvent Title: " + eventTitle + "\nDate: " + date + "\nNear: " + location + "\nMagnitude: " + magnitudeValue + " " + magnitudeUnit);
     }
 }
