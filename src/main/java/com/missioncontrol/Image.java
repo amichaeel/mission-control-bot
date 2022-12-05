@@ -18,7 +18,7 @@ public class Image {
             byte[] buffer = new byte[4096];
             int n = -1;
 
-            OutputStream os = new FileOutputStream("src/img/" + destinationFile);
+            OutputStream os = new FileOutputStream("src/img/" + destinationFile + ".png");
 
             while ((n = in.read(buffer)) != -1) {
                 os.write(buffer, 0, n);
