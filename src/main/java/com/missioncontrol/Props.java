@@ -19,7 +19,7 @@ public class Props {
     public static Props getProps() throws FileNotFoundException, IOException {
         Props propsObj = new Props();
         Properties props = readPropertiesFile("props.properties");
-        
+
         propsObj.consumerKey = props.getProperty("oauth.consumerKey");
         propsObj.consumerSecret = props.getProperty("oauth.consumerSecret");
         propsObj.accessToken = props.getProperty("oauth.accessToken");

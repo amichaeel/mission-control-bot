@@ -32,7 +32,7 @@ public class Nasa {
         String title = resObj.getString("title");
         String text = resObj.getString("explanation");
         String mediaType = resObj.getString("media_type");
-        String hdurl;
+        String imageURl;
         String videoUrl;
 
         if (text.length() > 280) {
@@ -53,12 +53,12 @@ public class Nasa {
                 break;
 
             case "image":
-                hdurl = resObj.getString("hdurl");
+                imageURl = resObj.getString("url");
 
-                Image.saveImage(hdurl, title);
+                Image.saveImage(imageURl, title);
                 File file = new File("src/img/" + title + ".png");
-
                 Tweet.newTweetWithImage(text, file);
+
                 Image.deleteImage(file);
                 break;
         }
