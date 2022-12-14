@@ -1,8 +1,11 @@
 package com.missioncontrol;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -91,6 +94,14 @@ public class Nasa {
     }
 
     public static void tweetHazard() throws Exception {
+        File data = new File("src/data/latestEvent.txt");
+        FileReader fr = new FileReader(data);
+        BufferedReader br = new BufferedReader(fr);
+        String latestEventTitle = "";
+
+        latestEventTitle = br.readLine();
+        br.close();
+
         Props keys = Props.getProps();
         String urlString = "https://eonet.gsfc.nasa.gov/api/v3/events";
 
@@ -101,6 +112,17 @@ public class Nasa {
 
         String eventTitle = latestEvent.getString("title");
 
+        if (eventTitle.equals(latestEventTitle)) {
+            System.out.println("No new event found. Exiting API Call.");
+            return;
+        }
+
+        latestEventTitle = eventTitle;
+
+        PrintWriter pw = new PrintWriter(data);
+        pw.print(latestEventTitle);
+        pw.close();
+
         JSONArray eventGeometryArr = latestEvent.getJSONArray("geometry");
         JSONObject eventGeometryObj = eventGeometryArr.getJSONObject(0);
         String magnitudeValue = "";
@@ -110,13 +132,13 @@ public class Nasa {
             magnitudeUnit = eventGeometryObj.get("magnitudeUnit").toString();
         }
 
-
         String date = eventGeometryObj.getString("date").substring(0, 10);
         JSONArray cords = eventGeometryObj.getJSONArray("coordinates");
         String lat = cords.get(1).toString();
         String lon = cords.get(0).toString();
 
-        String geoAPI = "https://api.geoapify.com/v1/geocode/reverse?lon=" + lon +"&lat="+ lat + "&format=json&apiKey=" + keys.geoapifykey;
+        String geoAPI = "https://api.geoapify.com/v1/geocode/reverse?lon=" + lon + "&lat=" + lat
+                + "&format=json&apiKey=" + keys.geoapifykey;
         System.out.println("Contacting API Via: " + geoAPI);
         // Get information about location from coordinates
         HttpResponse<JsonNode> geoapify = Unirest.get(geoAPI).asJson();
@@ -132,18 +154,16 @@ public class Nasa {
 
         String text;
         String res;
-        // if (!magnitudeValue.equals("null")) {
-        //     text = "Event Title: " + eventTitle + "\nDate: " + date + "\nNear: " + location + "\nMagnitude: " + magnitudeValue + " " + magnitudeUnit;
-        // } else {
-        //     text = "Event Title: " + eventTitle + "\nDate: " + date + "\nNear: " + location;
-        // }
+        if (!magnitudeValue.equals("null")) {
+            text = "Event Title: " + eventTitle + "\nDate: " + date + "\nNear: " + location + "\nMagnitude: "
+                    + magnitudeValue + " " + magnitudeUnit;
+        } else {
+            text = "Event Title: " + eventTitle + "\nDate: " + date + "\nNear: " + location;
+        }
 
-
-
-        //Contact OpenAI to Structure information into a sentence
-        text = "Event Title: Iceberg A80A\nDate: 2022-12-02\nNear: Weddell Sea\nMagnitude: 171.0 NM^2";
+        // Contact OpenAI to Structure information into a sentence
         res = OpenAI.fluentSentence(text);
-        //Tweet
+        // Tweet
         Tweet.newTweet(res);
     }
 }
