@@ -7,11 +7,11 @@ Mission Control Bot is a Twitter bot that uses NASA's API to provide interesting
 - Uses Java and Google Cloud for efficient and reliable performance
 
 # Requirements
-1. A Twitter account to use as the bot's handle
-2. A Google Cloud account to host the bot
-3. A NASA API key to access the data
-4. An OpenAI API Key to translate data into fluent readable sentences.
-5. A Geoapify API Key to locate coordinates.
+- A Twitter account to use as the bot's handle.
+- A Google Cloud account to host the bot.
+- A NASA API key to access the data.
+- An OpenAI API Key to translate data into fluent readable sentences.
+- A Geoapify API Key to locate coordinates.
 
 # Setup
 1. Create a Twitter account for the bot and obtain your API keys from the Twitter developer portal.
