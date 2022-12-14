@@ -130,11 +130,20 @@ public class Nasa {
             location = geoInfo.getString("city") + ", " + geoInfo.getString("country");
         }
 
-        // Tweet the latest hazard information
-        if (!magnitudeValue.equals("null")) {
-            Tweet.newTweet("⚠️Hazard Detected\nEvent Title: " + eventTitle + "\nDate: " + date + "\nNear: " + location + "\nMagnitude: " + magnitudeValue + " " + magnitudeUnit);
-        } else {
-            Tweet.newTweet("⚠️Hazard Detected\nEvent Title: " + eventTitle + "\nDate: " + date + "\nNear: " + location);
-        }
+        String text;
+        String res;
+        // if (!magnitudeValue.equals("null")) {
+        //     text = "Event Title: " + eventTitle + "\nDate: " + date + "\nNear: " + location + "\nMagnitude: " + magnitudeValue + " " + magnitudeUnit;
+        // } else {
+        //     text = "Event Title: " + eventTitle + "\nDate: " + date + "\nNear: " + location;
+        // }
+
+
+
+        //Contact OpenAI to Structure information into a sentence
+        text = "Event Title: Iceberg A80A\nDate: 2022-12-02\nNear: Weddell Sea\nMagnitude: 171.0 NM^2";
+        res = OpenAI.fluentSentence(text);
+        //Tweet
+        Tweet.newTweet(res);
     }
 }
