@@ -23,7 +23,7 @@ public class Bot {
             }
 
             // Hazard API Call
-            if (now.toString().split(":")[1].equals("30")) {
+            if (now.toString().split(":")[1].equals("30") || now.toString().split(":")[1].equals("00")) {
                 System.out.println("CONTACTING NASA HAZARD API");
                 Nasa.tweetHazard();
             }
