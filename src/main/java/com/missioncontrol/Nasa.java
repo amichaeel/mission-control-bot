@@ -60,7 +60,7 @@ public class Nasa {
                 File HDImage = new File("src/img/" + title + ".png");
 
                 // If image size is too large for twitter, obtain SD image
-                if ((double) HDImage.length() / (1024 * 1024) > 512) {
+                if ((double) HDImage.length() / 1024 / 1024 > 5) {
                     System.out.println("HD File too large for Twitter. Retreving smaller file.");
                     imageURL = resObj.getString("url");
 
@@ -196,10 +196,12 @@ public class Nasa {
         // Make sure promt only includes magnitude if it exists
         if (!magnitudeValue.equals("null")) {
             prompt = "Event Title: " + eventTitle + "\nDate: " + date + "\nNear: " + location + "\nMagnitude: " + magnitudeValue + " " + magnitudeUnit;
+        } else {
+            prompt = "Event Title: " + eventTitle + "\nDate: " + date + "\nNear: " + location;
         }
-        prompt = "Event Title: " + eventTitle + "\nDate: " + date + "\nNear: " + location;
 
         // Contact OpenAI to Structure information into a fluent sentence
+        System.out.println(prompt);
         String res = OpenAI.fluentSentence(prompt);
 
         // Tweet

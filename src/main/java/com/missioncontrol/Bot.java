@@ -11,7 +11,8 @@ public class Bot {
         // Times for bot to call API's;
         LocalTime AODTime = LocalTime.parse("08:00");
         int botCycle = 0;
-
+        Nasa.tweetAOD();
+        Nasa.tweetHazard();
         while (running) {
             botCycle += 1;
             System.out.println("Bot Cycle Count: " + botCycle);

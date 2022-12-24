@@ -14,7 +14,7 @@ public class OpenAI {
         OpenAiService service = new OpenAiService(keys.openAIKey);
 
         CompletionRequest completionRequest = CompletionRequest.builder()
-                .prompt("Write a fluent sentence for the following hazardous event: " + data + ".")
+                .prompt("Write a fluent sentence with the follow data and then give it a danger level out of 1 to 5: " + data + ".")
                 .model("text-davinci-003")
                 .maxTokens(4000)
                 .echo(false)
